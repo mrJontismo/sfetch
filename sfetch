@@ -1,0 +1,37 @@
+#!/bin/sh
+
+get_username() {
+	user=${USER:-$(id -un)}
+	echo $user
+}
+
+get_hostname() {
+	cat /etc/hostname || uname -n
+}
+
+get_distro() {
+	[ -f /etc/os-release ] && . /etc/os-release && echo $PRETTY_NAME && return
+	lsb_release -d -s | tr -d '"' && return
+}
+
+get_arch() {
+	uname -m
+}
+
+get_kernel() {
+	uname -r
+}
+
+get_uptime() {
+	uptime -p
+}
+
+print_info() {
+	echo "$(get_username)@$(get_hostname)"
+	echo "Distro -> $(get_distro)"
+	echo "Arch -> $(get_arch)"
+	echo "Kernel -> $(get_kernel)"
+	echo "Uptime -> $(get_uptime)"
+}
+
+print_info
